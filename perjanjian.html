@@ -50,43 +50,61 @@
     <audio id="lagu" loop src="janji.mp3"></audio>
 
     <script>
-        let sSigned = false;
-        const btn = document.getElementById('nextBtn');
-        const lagu = document.getElementById('lagu');
-        const overlay = document.getElementById('overlay-transisi');
+    let sSigned = false;
+    const btn = document.getElementById('nextBtn');
+    const lagu = document.getElementById('lagu');
+    const overlay = document.getElementById('overlay-transisi');
 
-        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+    window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
 
-        function stampSayangg() {
-            if(!sSigned) {
-                sSigned = true;
-                const thumb = document.getElementById('sThumb');
-                thumb.innerHTML = "🎯";
-                thumb.classList.remove('active-click');
-                thumb.classList.add('inked', 'inked-sayangg');
-                document.getElementById('sText').innerText = "SAH ✅";
-                document.getElementById('sText').style.color = "#ec4899";
-                btn.style.display = 'block';
+    function stampSayangg() {
+        if(!sSigned) {
+            sSigned = true;
+            const thumb = document.getElementById('sThumb');
+            thumb.innerHTML = "🎯";
+            thumb.classList.remove('active-click');
+            thumb.classList.add('inked', 'inked-sayangg');
+            document.getElementById('sText').innerText = "SAH ✅";
+            document.getElementById('sText').style.color = "#ec4899";
+            btn.style.display = 'block';
+        }
+    }
+
+    function playMusic() { 
+        if(!lagu.paused) return;
+        lagu.volume = 0;
+        lagu.play().then(() => {
+            let fi = setInterval(() => { if(lagu.volume < 0.9) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+        }).catch(() => {}); 
+    }
+    document.addEventListener('click', playMusic, {once:true});
+    document.addEventListener('touchstart', playMusic, {once:true});
+
+    // =========================================================
+    // DI SINI LETAK PERUBAHANNYA (FUNGSI PINDAH HALAMAN BARU)
+    // =========================================================
+    function pindahHalaman(tuj) {
+        overlay.style.opacity = '1';
+        
+        // Ganti angka di bawah ini dengan nomor WA kamu (awali angka 62)
+        const nomorWA = "6287710591220"; 
+        const pesan = encodeURIComponent("Halo Kikyyy! Aku udah baca dan cap jempol SURAT PERJANJIAN RESMI-nya yaaa! Janji jangan nakal lagi! 📝🎯❤️");
+        const linkWA = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${pesan}`;
+
+        let fo = setInterval(() => {
+            if(lagu.volume > 0.02) {
+                lagu.volume -= 0.02;
+            } else {
+                clearInterval(fo);
+                lagu.pause();
+                
+                // Buka WA untuk kirim pesan, lalu lanjut ke wishes.html
+                window.open(linkWA, '_blank'); 
+                window.location.href = tuj; 
             }
-        }
-
-        function playMusic() { 
-            if(!lagu.paused) return;
-            lagu.volume = 0;
-            lagu.play().then(() => {
-                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
-            }).catch(() => {}); 
-        }
-        document.addEventListener('click', playMusic, {once:true});
-        document.addEventListener('touchstart', playMusic, {once:true});
-
-        function pindahHalaman(tuj) {
-            overlay.style.opacity = '1';
-            let fo = setInterval(() => {
-                if(lagu.volume > 0.02) lagu.volume -= 0.02;
-                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
-            }, 30);
-        }
+        }, 30);
+    }
     </script>
+    
 </body>
 </html>
