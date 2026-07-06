@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Dia</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f9ff; color: #334155; font-family: sans-serif; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        h2 { margin: 20px 0; font-weight: 700; color: #0369a1; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; max-width: 550px; width: 100%; margin-top: 15px; }
+        .grid img {
+            width: 100%; height: 130px; object-fit: cover; border-radius: 16px; border: 3px solid white;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s;
+            animation: bounceIn 0.8s ease forwards; opacity: 0;
+        }
+        .grid img:hover { transform: scale(1.05) rotate(2deg); }
+        @keyframes bounceIn { from { opacity:0; transform:scale(0.3); } to { opacity:1; transform:scale(1); } }
+        
+        .lightbox { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(224, 242, 254, 0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .lightbox img { max-width: 100%; max-height: 75vh; border-radius: 20px; border: 5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .close { position: absolute; top: 20px; right: 20px; font-size: 2.5rem; color: #0369a1; cursor: pointer; }
+        .btn { margin: 40px 0; padding: 14px 35px; background: linear-gradient(135deg, #a855f7, #38bdf8); color: white; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(168,85,247,0.2); }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0f9ff; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <h2>Senyum Ter indaaa nyaaa 🥰</h2>
+
+    <div class="grid">
+        <img src="cantik1.jpg" onclick="openBox(this.src)" style="animation-delay: 0.1s;">
+        <img src="cantik2.jpg" onclick="openBox(this.src)" style="animation-delay: 0.2s;">
+        <img src="cantik3.jpg" onclick="openBox(this.src)" style="animation-delay: 0.3s;">
+        <img src="cantik4.jpg" onclick="openBox(this.src)" style="animation-delay: 0.4s;">
+        <img src="cantik5.jpg" onclick="openBox(this.src)" style="animation-delay: 0.5s;">
+        <img src="cantik6.jpg" onclick="openBox(this.src)" style="animation-delay: 0.6s;">
+        <img src="cantik7.jpg" onclick="openBox(this.src)" style="animation-delay: 0.7s;">
+        <img src="cantik8.jpg" onclick="openBox(this.src)" style="animation-delay: 0.8s;">
+    </div>
+
+    <div class="lightbox" id="box">
+        <span class="close" onclick="closeBox()">&times;</span>
+        <img id="boxImg" src="">
+    </div>
+
+    <button onclick="pindahHalaman('video.html')" class="btn">Lanjuttt Liat Videooo 🎬</button>
+
+    <audio id="lagu" loop src="elakan.mp3"></audio>
+    <script>
+        const b = document.getElementById('box'); const bi = document.getElementById('boxImg');
+        function openBox(s) { bi.src = s; b.style.display = 'flex'; }
+        function closeBox() { b.style.display = 'none'; }
+
+        const lagu = document.getElementById('lagu');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.02) lagu.volume -= 0.02;
+                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keputusan Akhir Buat Sayangg</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #334155; font-family: sans-serif;
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+        .card { background: white; padding: 35px 25px; border-radius: 28px; max-width: 400px; width: 100%; box-shadow: 0 15px 35px rgba(14,165,233,0.1); border: 2px solid white; }
+        h2 { font-weight: 700; color: #0369a1; margin-bottom: 12px; }
+        .msg { color: #475569; margin-bottom: 35px; line-height: 1.6; font-weight: 500; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; position: relative; }
+        .btn-yes {
+            padding: 15px; background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: white; border: none;
+            border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: 0.3s; box-shadow: 0 5px 15px rgba(14,165,233,0.2);
+        }
+        .btn-no {
+            padding: 12px; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; border-radius: 50px;
+            cursor: pointer; font-size: 0.95rem; transition: transform 0.2s ease; position: relative;
+        }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #bae6fd; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <div class="card">
+        <h2 id="hd">Gimanaaa Sayangg? 🥺👉👈</h2>
+        <p class="msg" id="ms">apapun pilihan sayangg, kikyy tidaa apaa apaa kok... kikyy tetep mau bilang maaciii banyaa udaaaa mau bacaaa sampai akhirrr...</p>
+
+        <div class="btn-group" id="gr">
+            <button class="btn-yes" onclick="ok()">Tombol Aku Maafin 🤍</button>
+            <button class="btn-no" id="nob" onmouseover="kabur()" onclick="kabur()">Tombol Belum Bisa 🌙</button>
+        </div>
+    </div>
+
+    <audio id="lagu" loop src="endinglagu.mp3"></audio>
+
+    <script>
+        const lagu = document.getElementById('lagu');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+        window.addEventListener('load', playMusic);
+
+        function ok() {
+            confetti({ particleCount: 180, spread: 85, origin: { y: 0.6 } });
+            document.getElementById('hd').innerText = "Yeeeaaayyy Maaciii! 🥰🎈";
+            document.getElementById('ms').innerText = "maaciii banyaa udaaaa mau maafin kikyyy sayangg... kikyy janji bakal jadi lebih baik lagi buat sayangg love youuuu mwahhh!";
+            document.getElementById('gr').style.display = 'none';
+        }
+        function kabur() {
+            const btn = document.getElementById('nob');
+            const x = Math.random() * (window.innerWidth - 180) - (window.innerWidth/2 - 90);
+            const y = Math.random() * (window.innerHeight - 200) - (window.innerHeight/2 - 100);
+            btn.style.position = 'fixed'; btn.style.left = '50%'; btn.style.top = '50%'; btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+    </script>
+</body>
+</html>

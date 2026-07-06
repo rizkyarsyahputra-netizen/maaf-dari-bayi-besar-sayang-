@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polaroid Memories</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); color: #334155; min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        h2 { margin-bottom: 30px; font-weight: 700; color: #0369a1; text-align: center; }
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 850px; }
+        .polaroid {
+            background: #ffffff; padding: 12px 12px 20px 12px; border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.08); transform: rotate(-3deg);
+            transition: all 0.3s ease; max-width: 240px; width: 100%; border: 1px solid #e2e8f0;
+        }
+        .polaroid:nth-child(even) { transform: rotate(4deg); }
+        .polaroid:nth-child(3n) { transform: rotate(-2deg); }
+        .polaroid:hover { transform: rotate(0deg) scale(1.06); box-shadow: 0 12px 25px rgba(168,85,247,0.15); }
+        .polaroid img { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; }
+        .caption { color: #0284c7; font-family: 'Courier New', monospace; font-weight: bold; text-align: center; margin-top: 12px; font-size: 0.95rem; }
+        .btn {
+            margin-top: 35px; padding: 12px 35px; background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+        }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e0f2fe; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <h2>Memori Manisss Kitaaa 🧸</h2>
+
+    <div class="container">
+        <div class="polaroid"><img src="pap1.png"><div class="caption">Pas jalan barengg.. banyaa tawanyaa ehee..</div></div>
+        <div class="polaroid"><img src="pap2.jpg"><div class="caption">Udaaaa lamaaa tapii...</div></div>
+        <div class="polaroid"><img src="pap3.png"><div class="caption">Maaciii udaaaa temenin kikyyy🤍</div></div>
+        <div class="polaroid"><img src="pap4.png"><div class="caption">Momen random yg paling kikyy sukaaa!</div></div>
+        <div class="polaroid"><img src="pap5.png"><div class="caption">foto random kitaa mwhehehe 🤭</div></div>
+        <div class="polaroid"><img src="pap6.png"><div class="caption">I love you more and moreee ✨</div></div>
+    </div>
+
+    <button onclick="pindahHalaman('gallery.html')" class="btn">Buka Galeri Foto Diaaa 🌸</button>
+
+    <audio id="lagu" loop src="dadahan.mp3"></audio>
+    <script>
+        const lagu = document.getElementById('lagu');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.02) lagu.volume -= 0.02;
+                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Buat Sayangg</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #334155;
+            font-family: 'Courier New', Courier, monospace; min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
+        }
+        .box-surat {
+            background: rgba(255, 255, 255, 0.7); border: 2px solid rgba(255,255,255,0.9);
+            border-radius: 24px; padding: 30px; max-width: 480px; width: 100%;
+            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.1); backdrop-filter: blur(12px);
+        }
+        .text-area { font-size: 1.1rem; line-height: 1.6; min-height: 160px; margin-bottom: 20px; font-weight: bold; color: #0369a1; white-space: pre-wrap; }
+        .cursor { animation: blink 0.8s infinite; color: #a855f7; font-weight: bold; }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        .btn {
+            display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #38bdf8, #a855f7);
+            color: white; border: none; border-radius: 50px; font-weight: bold; font-family: sans-serif;
+            cursor: pointer; text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+        }
+        .info-musik { font-family: sans-serif; font-size: 0.85rem; color: #64748b; text-align: center; margin-top: 15px; }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #bae6fd; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <div class="box-surat">
+        <div class="text-area" id="targetKetik"><span class="cursor">|</span></div>
+        <button onclick="pindahHalaman('hero.html')" class="btn" id="nextBtn">Lanjuttt ke Depannn 🏃‍♂️💨</button>
+    </div>
+    <div class="info-musik">🎵 Musik pelukan hangat otomatis buat sayangg...</div>
+
+    <audio id="lagu" loop src="bawahan.mp3"></audio>
+
+    <script>
+        const text = "haloo sayangg...\n\nkikyy mau minta maaf yaaa atas semua salah kikyy... kikyy tau udaaaa bikin kamu kesel tapii kikyy takk paaa koo kalau sayangg mau marah duluuu, asal jangan tinggalin kikyy yaaa... dann jangann lamaa lamaa maraa nyaa.. maaciii udaaaa bertahan sampai sekaranggg sayangg... i love youuuu🤍";
+        let idx = 0;
+        const target = document.getElementById('targetKetik');
+        const btn = document.getElementById('nextBtn');
+        const lagu = document.getElementById('lagu');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+
+        function mengetik() {
+            if (idx < text.length) {
+                target.innerHTML = text.substring(0, idx + 1) + '<span class="cursor">|</span>';
+                idx++; setTimeout(mengetik, 60);
+            } else { document.querySelector('.cursor').style.display = 'none'; btn.style.display = 'block'; }
+        }
+        setTimeout(() => { playMusic(); mengetik(); }, 1000);
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.02) lagu.volume -= 0.02;
+                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

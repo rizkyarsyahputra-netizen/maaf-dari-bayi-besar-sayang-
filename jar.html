@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Jar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); color: #334155; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow: hidden; position: relative; font-family: sans-serif;
+        }
+        .note {
+            background: #fff9db; color: #1e293b; padding: 16px; border-radius: 16px; border: 2px dashed #fcc419;
+            max-width: 260px; width: 100%; position: absolute; text-align: center; font-family: 'Courier New', monospace; font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); opacity: 0; transform: scale(0.5) translateY(100px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
+        }
+        .note.show { opacity: 1; transform: scale(1) translateY(-130px); pointer-events: auto; }
+        .jar { font-size: 7rem; cursor: pointer; user-select: none; filter: drop-shadow(0 8px 15px rgba(56,189,248,0.2)); transition: transform 0.15s; }
+        .jar:active { transform: scale(0.85) rotate(-5deg); }
+        .hint { margin-top: 20px; color: #64748b; font-size: 0.95rem; font-weight: 500; }
+        .btn { position: absolute; bottom: 45px; padding: 12px 35px; background: white; border: 2px solid #a855f7; color: #a855f7; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e0f2fe; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <div class="note" id="nt">Ketuk toplesnaaa!</div>
+    <div class="jar" onclick="bukaM()">🫙</div>
+    <div class="hint">Coba ketuk toplesnya sayangg, keluar apa yaaa? 🤭</div>
+
+    <button onclick="pindahHalaman('perjanjian.html')" class="btn">Buka Surat Perjanjian Resmi 📝</button>
+
+    <audio id="lagu" loop src="jarlagu.mp3"></audio>
+    <script>
+        const mems = [
+            "kikyy inget pas kita ketawa barenggg sayangg lucuu bangedd ehee..",
+            "udaaaa tidaa apaa apaa jangan sediii terusss yaaa.. kikyy gamau nakal lagii..",
+            "maaciii udaaaa selalu ada di samping kikyyy",
+            "sayanggg itu binii kikyy selamanyaaa"
+        ];
+        let l = -1;
+        function bukaM() {
+            let i = Math.floor(Math.random() * mems.length);
+            while(i === l) { i = Math.floor(Math.random() * mems.length); }
+            l = i;
+            const nt = document.getElementById('nt');
+            nt.classList.remove('show');
+            setTimeout(() => { nt.innerText = mems[i]; nt.classList.add('show'); }, 80);
+        }
+
+        const lagu = document.getElementById('lagu');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.02) lagu.volume -= 0.02;
+                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

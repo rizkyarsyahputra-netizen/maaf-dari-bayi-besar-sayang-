@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Terakhir</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); color: #334155;
+            font-family: 'Courier New', Courier, monospace; min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px;
+        }
+        .paper {
+            background: rgba(255, 255, 255, 0.75); border: 2px solid white;
+            border-radius: 24px; padding: 30px; max-width: 460px; width: 100%;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.03); backdrop-filter: blur(10px);
+        }
+        .text { font-size: 1.05rem; line-height: 1.7; min-height: 190px; white-space: pre-wrap; font-weight: bold; color: #0369a1; }
+        .cursor { animation: blink 1s infinite; color: #a855f7; }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        .btn {
+            display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #38bdf8, #a855f7);
+            color: white; border: none; border-radius: 50px; font-weight: bold; font-family: sans-serif;
+            cursor: pointer; text-align: center; text-decoration: none; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e0f2fe; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <div class="paper">
+        <div class="text" id="slow"><span class="cursor">|</span></div>
+        <button onclick="pindahHalaman('ending.html')" class="btn" id="btnE">Buka Keputusan Akhirrr 🥺👉👈</button>
+    </div>
+
+    <audio id="soft" loop src="last.mp3"></audio>
+
+    <script>
+        const txt = "ini halaman terakhirrr dari kikyy sayangg...\n\nkikyy cuma mau sayangg tau kalau rasa sayangg kikyy ke bayii mungill kikyyy itu banyaa bangedd, gaa bakal ilang... udaaaa banyaa kenangan yg jadi momenn maniss buat kita... maaciii yaaa udaaaa sempat mampir dan bacaa pesenn kikyyy...";
+        let i = 0; const target = document.getElementById('slow'); const btn = document.getElementById('btnE'); const soft = document.getElementById('soft');
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playSoft() { 
+            if(!soft.paused) return;
+            soft.volume = 0;
+            soft.play().then(() => {
+                let fi = setInterval(() => { if(soft.volume < 0.25) soft.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playSoft, {once:true});
+        document.addEventListener('touchstart', playSoft, {once:true});
+
+        function typeS() {
+            if (i < txt.length) {
+                target.innerHTML = txt.substring(0, i + 1) + '<span class="cursor">|</span>';
+                i++; setTimeout(typeS, 85);
+            } else { document.querySelector('.cursor').style.display = 'none'; btn.style.display = 'block'; }
+        }
+        setTimeout(() => { playSoft(); typeS(); }, 1200);
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(soft.volume > 0.02) soft.volume -= 0.02;
+                else { clearInterval(fo); soft.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

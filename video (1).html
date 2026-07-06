@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Cinematic Sayangg</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #e0f2fe; color: #334155; font-family: sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: background-color 0.8s ease; }
+        body.cinema-mode { background-color: #090d16; }
+        .container { background: rgba(255,255,255,0.5); padding: 30px; border-radius: 24px; border: 2px solid white; backdrop-filter: blur(8px); text-align: center; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: all 0.8s ease; }
+        body.cinema-mode .container { background: rgba(15, 23, 42, 0.2); border-color: rgba(255,255,255,0.1); box-shadow: none; }
+        h3 { margin-bottom: 20px; color: #0369a1; transition: color 0.8s ease; }
+        body.cinema-mode h3 { color: #94a3b8; }
+        .vid-card { background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px; cursor: pointer; transition: 0.3s; font-weight: bold; color: #0284c7; border: 2px solid #38bdf8; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15); }
+        .vid-card:hover { transform: translateY(-3px); background: #f0f9ff; }
+        .pop { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 200; backdrop-filter: blur(4px); }
+        .pop-box { width: 100%; max-width: 600px; position: relative; }
+        .pop video { width: 100%; border-radius: 16px; border: 4px solid white; box-shadow: 0 0 30px rgba(56, 189, 248, 0.4); }
+        .close-p { position: absolute; top: -45px; right: 0; font-size: 2.5rem; cursor: pointer; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .btn { display: inline-block; margin-top: 15px; padding: 12px 35px; background: #0ea5e9; color: white; border: none; border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; text-decoration: none; }
+        body.cinema-mode .btn { opacity: 0.3; pointer-events: none; }
+        #overlay-transisi { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #e0f2fe; z-index: 9999; pointer-events: none; transition: opacity 0.8s ease; opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="overlay-transisi"></div>
+
+    <div class="container">
+        <h3>Video Cinematic Sayangg 🍿</h3>
+        <div class="vid-card" onclick="playV('cinematic.mp4')">🎬 Putar Video cinematic sayangg ehee🤍🤍</div>
+        <button onclick="pindahHalaman('jar.html')" class="btn">Buka Memory Jar 🫙</button>
+    </div>
+
+    <div class="pop" id="p">
+        <div class="pop-box">
+            <span class="close-p" onclick="closeV()">&times;</span>
+            <video id="v" controls src=""></video>
+        </div>
+    </div>
+
+    <audio id="lagu" loop src="videolagu.mp3"></audio>
+
+    <script>
+        const p = document.getElementById('p'); const v = document.getElementById('v');
+        const lagu = document.getElementById('lagu'); const body = document.body;
+        const overlay = document.getElementById('overlay-transisi');
+
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { overlay.style.opacity = '0'; }, 100); });
+
+        function playMusic() { 
+            if(!lagu.paused) return;
+            lagu.volume = 0;
+            lagu.play().then(() => {
+                let fi = setInterval(() => { if(lagu.volume < 0.4) lagu.volume += 0.02; else clearInterval(fi); }, 50);
+            }).catch(() => {}); 
+        }
+        document.addEventListener('click', playMusic, {once:true});
+        document.addEventListener('touchstart', playMusic, {once:true});
+
+        function playV(s) { 
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.04) lagu.volume -= 0.04;
+                else { clearInterval(fo); lagu.pause(); v.src = s; p.style.display = 'flex'; body.classList.add('cinema-mode'); v.play().catch(()=>{}); }
+            }, 30);
+        }
+        
+        function closeV() { 
+            p.style.display = 'none'; v.pause(); body.classList.remove('cinema-mode');
+            playMusic();
+        }
+
+        function pindahHalaman(tuj) {
+            overlay.style.opacity = '1';
+            let fo = setInterval(() => {
+                if(lagu.volume > 0.02) lagu.volume -= 0.02;
+                else { clearInterval(fo); lagu.pause(); window.location.href = tuj; }
+            }, 30);
+        }
+    </script>
+</body>
+</html>
